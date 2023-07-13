@@ -1,0 +1,65 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Offers",
+    "dateExported": "2023-07-13T22:32:40.914Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "586a1a96-7514-4237-b6d8-c214f6e0c03c",
+            "colId": "2dd93409-27cf-45de-8cab-b88071c68983",
+            "containerId": "",
+            "name": "/offers",
+            "url": "http://127.0.0.1:3000/offers",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-07-13T22:26:41.897Z",
+            "modified": "2023-07-13T22:31:18.666Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0bc01609-d9a6-448f-93a8-1a1de903924a",
+            "colId": "2dd93409-27cf-45de-8cab-b88071c68983",
+            "containerId": "",
+            "name": "/offers",
+            "url": "http://127.0.0.1:3000/offers",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-07-13T22:26:50.707Z",
+            "modified": "2023-07-13T22:31:36.310Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "132c5110-8e89-4c72-953b-a1bec83e3b5f",
+            "colId": "2dd93409-27cf-45de-8cab-b88071c68983",
+            "containerId": "",
+            "name": "/offers/{offerId}",
+            "url": "http://127.0.0.1:3000/offers/1",
+            "method": "PATCH",
+            "sortNum": 40000,
+            "created": "2023-07-13T22:27:02.507Z",
+            "modified": "2023-07-13T22:31:56.908Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0a5d3350-ef07-4670-8195-9874acbe55d1",
+            "colId": "2dd93409-27cf-45de-8cab-b88071c68983",
+            "containerId": "",
+            "name": "/offers/{offerId}",
+            "url": "http://127.0.0.1:3000/offers/1",
+            "method": "DELETE",
+            "sortNum": 50000,
+            "created": "2023-07-13T22:27:10.718Z",
+            "modified": "2023-07-13T22:32:18.369Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
