@@ -11,7 +11,7 @@ const offerRoutes = [
       // Only display 10 at a time, max 10
       // Queries available: ?price=int ?category={CategoryType} ?date={date} ?ascending={true/false} ?range{min, max} ?dates{start, end} ?user={userId}
       return "Hello World!";
-    }
+    },
   },
   {
     method: "POST",
@@ -21,7 +21,7 @@ const offerRoutes = [
       h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
     ) => {
       return "Hello World!";
-    }
+    },
   },
   {
     method: "PATCH",
@@ -32,7 +32,7 @@ const offerRoutes = [
     ) => {
       // Queries available:  ?sort={price}?category={CategoryType}
       return "Hello World!";
-    }
+    },
   },
   {
     method: "DELETE",
@@ -43,7 +43,7 @@ const offerRoutes = [
     ) => {
       // Queries available:  ?sort={price}?category={CategoryType}
       return "Hello World!";
-    }
+    },
   },
 ];
 

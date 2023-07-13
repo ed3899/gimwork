@@ -1,7 +1,7 @@
 import R from "ramda";
 import Hapi from "@hapi/hapi";
 
-import userRoutes from "./user";
+import userRoutes from "./users/routes";
 import offerRoutes from "./offers";
 
 interface Route {
@@ -14,17 +14,17 @@ interface Route {
 }
 
 const root = async () => {
-
   const server = new Hapi.Server({
     port: 3000,
     host: "127.0.0.1",
   });
 
-
-  R.forEach<Route>((route) => {
-    server.route(route);
-  }, [...userRoutes, ...offerRoutes]);
-
+  R.forEach<Route>(
+    (route) => {
+      server.route(route);
+    },
+    [...userRoutes, ...offerRoutes]
+  );
 
   await server.start();
   console.log("Server running on", server.info.uri);
