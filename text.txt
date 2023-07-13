@@ -1,0 +1,37 @@
+Sure! Here's an example of the RESTful API endpoints in pseudocode that fulfill the given requirements:
+
+Sign Up:
+
+    Endpoint: POST /users
+    Description: This endpoint is used to create a new user account.
+    Request Payload: User details including name, email, password, etc.
+    Response: Success message or newly created user object.
+
+Endpoint: POST /login
+Description: This endpoint allows users to authenticate and obtain an access token or session identifier.
+Request Payload: User credentials (email/username and password).
+Response: Success message along with an access token or session identifier.
+
+
+1. GET /users/{userId}
+   - This endpoint retrieves the information of a specific user by their `userId`. It returns the user's email, phone number, name, and password.
+
+2. PUT /users/{userId}
+   - This endpoint allows the user to update their information. It receives the updated user data as a request payload and updates the corresponding user record.
+
+3. GET /users/{userId}/wishlist
+   - This endpoint fetches all the offers saved by a specific user identified by their `userId`. It returns a list of all the saved offers with their product information.
+
+4. GET /users/{userId}/published-offers
+   - This endpoint retrieves all the offers published by a specific user identified by their `userId`. It returns a list of all the published offers along with their product information.
+
+5. GET /offers
+   - This endpoint retrieves all the offers available in the system. It returns a list of all the offers from all users, including the product information and the username of the user who published each offer.
+
+6. GET /offers?sort={sortType}?category={CategoryType}
+   - This endpoint allows the user to sort the offers based on different criteria. The `sortType` parameter can be used to specify the sorting criteria, such as cost, publish date, or category. It returns a sorted list of all the offers accordingly.
+
+7. POST /categories/{CategoryType}/offers
+   - This endpoint enables the user to publish a new offer. It receives the offer details (description, price, category, promotional picture) as a request payload and creates a new offer record in the system, associated with the current user.
+
+These are the main RESTful API endpoints needed for the given requirements. Each endpoint performs a specific action and interacts with the database to retrieve or modify the necessary data. Remember to implement the corresponding logic and database operations in your backend server based on these pseudocode examples.
