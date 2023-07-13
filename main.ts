@@ -1,24 +1,25 @@
-import Hapi from '@hapi/hapi';
+import Hapi from "@hapi/hapi";
+
 
 const init = async () => {
   const server = new Hapi.Server({
     port: 3000,
-    host: 'localhost'
+    host: "localhost",
   });
 
   server.route({
-    method: 'GET',
-    path: '/',
+    method: "POST",
+    path: "/users",
     handler: (request, h) => {
-      return 'Hello World!';
-    }
+      return "Hello World!";
+    },
   });
 
   await server.start();
-  console.log('Server running on', server.info.uri);
+  console.log("Server running on", server.info.uri);
 };
 
-process.on('unhandledRejection', (err) => {
+process.on("unhandledRejection", (err) => {
   console.error(err);
   process.exit(1);
 });

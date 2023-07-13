@@ -2,7 +2,7 @@ Sure! Here's an example of the RESTful API endpoints in pseudocode that fulfill 
 
 Sign Up:
 
-    Endpoint: POST /users
+    Endpoint: POST /users x
     Description: This endpoint is used to create a new user account.
     Request Payload: User details including name, email, password, etc.
     Response: Success message or newly created user object.
@@ -13,19 +13,19 @@ Request Payload: User credentials (email/username and password).
 Response: Success message along with an access token or session identifier.
 
 
-1. GET /users/{userId}
+1. GET /users/{userId} X
    - This endpoint retrieves the information of a specific user by their `userId`. It returns the user's email, phone number, name, and password.
 
-2. PUT /users/{userId}
+2. PUT /users/{userId} x
    - This endpoint allows the user to update their information. It receives the updated user data as a request payload and updates the corresponding user record.
 
-3. GET /users/{userId}/wishlist
+3. GET /users/{userId}/wishlist x
    - This endpoint fetches all the offers saved by a specific user identified by their `userId`. It returns a list of all the saved offers with their product information.
 
-4. GET /users/{userId}/published-offers
+4. GET /users/{userId}/published-offers x
    - This endpoint retrieves all the offers published by a specific user identified by their `userId`. It returns a list of all the published offers along with their product information.
 
-5. GET /offers
+5. GET /offers 
    - This endpoint retrieves all the offers available in the system. It returns a list of all the offers from all users, including the product information and the username of the user who published each offer.
 
 6. GET /offers?sort={sortType}?category={CategoryType}
