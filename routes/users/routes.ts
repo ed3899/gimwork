@@ -8,10 +8,16 @@ const userRoutes = [
     path: "/users",
     handler: (
       request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>,
-      p: InstanceType<typeof PrismaClient>
+      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
     ) => {
-      request.server.app.prisma;
+      // request.server.app.prisma.user.create({
+      //   data: {
+      //     email: request.payload.email,
+      //     password: request.payload.password,
+      //     firstName: request.payload.firstName,
+      //     lastName: request.payload.lastName,
+      //   },
+      // });
 
       return "Hello World!";
     },

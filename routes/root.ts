@@ -12,8 +12,7 @@ interface Route {
   path: string;
   handler: (
     request: Hapi.Request<Hapi.ReqRefDefaults>,
-    h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>,
-    p: InstanceType<typeof PrismaClient>
+    h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
   ) => string;
 }
 
