@@ -5,6 +5,7 @@ import { signUpUserSchema } from "./handlers/signUpUser";
 import loginUser, { loginUserSchema } from "./handlers/loginUser";
 import confirmUser, { confirmUserSchema } from "./handlers/confirmUser";
 import patchUserById from "./handlers/patchUserById";
+import deleteUserById from "./handlers/deleteUserById";
 
 const userRoutes = [
   {
@@ -51,12 +52,7 @@ const userRoutes = [
   {
     method: "DELETE",
     path: "/users/{userId}",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
+    handler: deleteUserById,
   },
   //! User wishlist
   {

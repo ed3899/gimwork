@@ -1,43 +1,28 @@
 import Hapi from "@hapi/hapi";
 import { GimWorkResponse } from "../../types";
-import { User } from "./types";
-import joi from "joi";
 import cognitoAuth from "../../utils/cognitoAuth";
 import extractEmailFromCognito from "../../utils/getEmailFromCognitoResponse";
 
-export const patchUserSchema = joi.object<User>({
-  firstName: joi.string(),
-  lastName: joi.string(),
-  phoneNumber: joi.string(),
-});
-
-async function patchUserById(
+async function deleteUserById(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
-  const payload = request.payload as User;
   let GimWorkResponse: GimWorkResponse<unknown>;
-
   try {
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
-    const email = extractEmailFromCognito(res.UserAttributes)
+    const authEmail = extractEmailFromCognito(res.UserAttributes)
 
-    const patchedUser = await request.server.app.prisma.user.update({
+    const deletedUser = await request.server.app.prisma.user.delete({
       where: {
-        email: email,
-      },
-      data: {
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        phoneNumber: payload.phoneNumber,
-      },
+        email: authEmail,
+      }
     });
-    const { password, ...userDataToBeSent } = patchedUser;
+    const { password, ...userDataToBeSent } = deletedUser;
     GimWorkResponse = {
       status: 200,
-      message: "User patched",
+      message: "User deleted",
       data: userDataToBeSent,
       timestamp: new Date().toISOString(),
     };
@@ -56,4 +41,4 @@ async function patchUserById(
   }
 }
 
-export default patchUserById;
+export default deleteUserById;
