@@ -1,11 +1,10 @@
 // TODO ramda ?
-const extractEmailFromCognito = (array:any[]) => {
-  const emailObj = array.find(obj => obj.Name === 'email');
+const extractEmailFromCognito = (array: any[]) => {
+  const emailObj = array.find((obj) => obj.Name === "email");
   if (emailObj) {
     return emailObj.Value;
   }
-  return '';
+  return "";
 };
-
 
 export default extractEmailFromCognito;

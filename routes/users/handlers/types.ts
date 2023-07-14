@@ -1,3 +1,4 @@
+// TODO change to prisma types
 export interface User {
   userId: string;
   email: string;

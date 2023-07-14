@@ -12,12 +12,12 @@ async function deleteUserById(
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
-    const authEmail = extractEmailFromCognito(res.UserAttributes)
+    const authEmail = extractEmailFromCognito(res.UserAttributes);
 
     const deletedUser = await request.server.app.prisma.user.delete({
       where: {
         email: authEmail,
-      }
+      },
     });
     const { password, ...userDataToBeSent } = deletedUser;
     GimWorkResponse = {

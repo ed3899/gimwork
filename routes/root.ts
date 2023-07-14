@@ -4,7 +4,7 @@ import Hapi from "@hapi/hapi";
 import prisma from "../db/index";
 
 import userRoutes from "./users/routes";
-import offerRoutes from "./offers";
+import offerRoutes from "./offers/routes";
 
 export const server = new Hapi.Server({
   port: 3000,

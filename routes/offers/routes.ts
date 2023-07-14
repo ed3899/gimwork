@@ -1,4 +1,5 @@
 import Hapi from "@hapi/hapi";
+import createOffer from "./handlers/createOffer";
 
 const offerRoutes = [
   {
@@ -16,12 +17,7 @@ const offerRoutes = [
   {
     method: "POST",
     path: "/offers",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
+    handler: createOffer,
   },
   {
     method: "PATCH",
