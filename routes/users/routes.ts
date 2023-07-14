@@ -1,4 +1,5 @@
 import Hapi from "@hapi/hapi";
+import { PrismaClient } from "@prisma/client";
 
 const userRoutes = [
   {
@@ -7,8 +8,11 @@ const userRoutes = [
     path: "/users",
     handler: (
       request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
+      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>,
+      p: InstanceType<typeof PrismaClient>
     ) => {
+      request.server.app.prisma;
+
       return "Hello World!";
     },
   },

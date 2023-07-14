@@ -1,8 +1,17 @@
-import root from "./routes/root";
+import root, { server } from "./routes/root";
 
-process.on("unhandledRejection", (err) => {
+process.on("unhandledRejection", async (err) => {
+  await server.app.prisma.$disconnect();
   console.error(err);
   process.exit(1);
 });
 
-root();
+root()
+  .then((s) => {
+    console.log(`
+🚀 Server ready at: ${server.info.uri}
+`);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
