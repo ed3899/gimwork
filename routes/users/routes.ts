@@ -4,6 +4,7 @@ import { getUserById } from "./handlers/getUserById";
 import { signUpUserSchema } from "./handlers/signUpUser";
 import loginUser, { loginUserSchema } from "./handlers/loginUser";
 import confirmUser, { confirmUserSchema } from "./handlers/confirmUser";
+import patchUserById from "./handlers/patchUserById";
 
 const userRoutes = [
   {
@@ -18,7 +19,6 @@ const userRoutes = [
     handler: signUpUser,
   },
   {
-    //! User
     method: "POST",
     path: "/users/confirm",
     options: {
@@ -46,12 +46,7 @@ const userRoutes = [
   {
     method: "PATCH",
     path: "/users/{userId}",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
+    handler: patchUserById,
   },
   {
     method: "DELETE",
