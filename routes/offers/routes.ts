@@ -1,5 +1,6 @@
 import Hapi from "@hapi/hapi";
 import createOffer from "./handlers/createOffer";
+import patchOfferById from "./handlers/patchOfferById";
 
 const offerRoutes = [
   {
@@ -22,13 +23,7 @@ const offerRoutes = [
   {
     method: "PATCH",
     path: "/offers/{offerId}",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      // Queries available:  ?sort={price}?category={CategoryType}
-      return "Hello World!";
-    },
+    handler: patchOfferById,
   },
   {
     method: "DELETE",

@@ -6,14 +6,14 @@ import cognitoAuth from "../../utils/cognitoAuth";
 import extractEmailFromCognito from "../../utils/getEmailFromCognitoResponse";
 import pickCategory from "../../utils/pickCategory";
 
-export const createOfferSchema = joi.object<Offer>({
-  Description: joi.string().required(),
-  Category: joi.string().required(),
-  Price: joi.number().required(),
+export const patchOfferSchema = joi.object<Offer>({
+  Description: joi.string(),
+  Category: joi.string(),
+  Price: joi.number(),
   PromotionalPicture: joi.string(),
 });
 
-async function createOffer(
+async function patchOffer(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
@@ -22,13 +22,17 @@ async function createOffer(
 
   try {
     const { Description, Category, Price, PromotionalPicture } = payload;
+    const {offerId} = request.params
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
     const email = extractEmailFromCognito(res.UserAttributes);
-    const pickedCategory = pickCategory(Category);
+    const pickedCategory = Category ? pickCategory(Category) : undefined;
 
-    const newOffer = await request.server.app.prisma.offer.create({
+    const newOffer = await request.server.app.prisma.offer.update({
+      where: {
+        offerId: offerId,
+      },
       data: {
         Description: Description,
         Category: pickedCategory,
@@ -43,8 +47,8 @@ async function createOffer(
     });
 
     GimWorkResponse = {
-      status: 201,
-      message: "Offer created successfully",
+      status: 200,
+      message: "Offer patched successfully",
       data: newOffer,
       timestamp: new Date().toISOString(),
     };
@@ -55,7 +59,7 @@ async function createOffer(
 
     GimWorkResponse = {
       status: 500,
-      message: "Offer creation failed",
+      message: "Offer patched failed",
       error: err.message,
       timestamp: new Date().toISOString(),
     };
@@ -64,4 +68,4 @@ async function createOffer(
   }
 }
 
-export default createOffer;
+export default patchOffer;

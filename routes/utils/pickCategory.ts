@@ -10,7 +10,5 @@ export default function pickCategory(c: Category) {
       return Category.Clothes;
     case "Electronic":
       return Category.Electronic;
-    default:
-      throw new Error("Invalid category");
   }
 }
