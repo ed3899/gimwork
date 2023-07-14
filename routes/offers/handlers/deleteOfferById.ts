@@ -1,19 +1,10 @@
 import Hapi from "@hapi/hapi";
 import { GimWorkResponse } from "../../types";
-import joi from "joi";
 import { Offer } from "@prisma/client";
 import cognitoAuth from "../../utils/cognitoAuth";
 import extractEmailFromCognito from "../../utils/getEmailFromCognitoResponse";
-import pickCategory from "../../utils/pickCategory";
 
-export const patchOfferSchema = joi.object<Offer>({
-  Description: joi.string(),
-  Category: joi.string(),
-  Price: joi.number(),
-  PromotionalPicture: joi.string(),
-});
-
-async function patchOffer(
+async function deleteOfferById(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
@@ -21,35 +12,25 @@ async function patchOffer(
   let GimWorkResponse: GimWorkResponse<unknown>;
 
   try {
-    const { Description, Category, Price, PromotionalPicture } = payload;
     const { offerId } = request.params;
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
     const email = extractEmailFromCognito(res.UserAttributes);
-    const pickedCategory = pickCategory(Category);
 
-    const newOffer = await request.server.app.prisma.offer.update({
+    const deleteOffer = await request.server.app.prisma.offer.delete({
       where: {
         offerId: offerId,
-      },
-      data: {
-        Description: Description,
-        Category: pickedCategory,
-        Price: Price,
-        PromotionalPicture: PromotionalPicture,
         CreatedBy: {
-          connect: {
-            email: email,
-          },
+          email: email,
         },
       },
     });
 
     GimWorkResponse = {
       status: 200,
-      message: "Offer patched successfully",
-      data: newOffer,
+      message: "Offer deleted successfully",
+      data: deleteOffer,
       timestamp: new Date().toISOString(),
     };
 
@@ -59,7 +40,7 @@ async function patchOffer(
 
     GimWorkResponse = {
       status: 500,
-      message: "Offer patched failed",
+      message: "Offer deletion failed",
       error: err.message,
       timestamp: new Date().toISOString(),
     };
@@ -68,4 +49,4 @@ async function patchOffer(
   }
 }
 
-export default patchOffer;
+export default deleteOfferById;
