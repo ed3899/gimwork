@@ -10,14 +10,11 @@ export default async function CognitoSignUp(
     region: process.env.AWS_REGION,
   });
 
-  const cognitoSecretHash = CalculateSecretHash(email);
-
   const cognitoResponse = await cognitoClient
     .signUp({
       ClientId: process.env.GIMWORK_COGNITO_POOL_CLIENT_ID!,
       Username: email,
       Password: hashedPassword,
-      SecretHash: cognitoSecretHash,
     })
     .promise();
 

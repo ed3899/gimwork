@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { hashPassword } from "../utils/passwordVerification";
+import sha256Hash from "../utils/passwordVerification";
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ async function seed() {
       firstName: "Alice",
       lastName: "Smith",
       phoneNumber: "123456789",
-      password: await hashPassword("test123"),
+      password: await sha256Hash("test123"),
     },
   });
 }

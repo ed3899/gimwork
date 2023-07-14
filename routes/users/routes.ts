@@ -1,35 +1,47 @@
 import Hapi from "@hapi/hapi";
-import POST_User from "./handlers/POST_user";
-import { GET_User } from "./handlers/GET_user";
-import { User } from "./handlers/types";
-import joi from "joi";
-
-const userSchema = joi.object<User>({
-  email: joi.string().email().required(),
-  password: joi.string().min(8).alphanum().required(),
-  firstName: joi.string().required(),
-  lastName: joi.string().required(),
-  phoneNumber: joi.string(),
-  offers: joi.array(),
-  wishlist: joi.array(),
-});
+import signUpUser from "./handlers/signUpUser";
+import { getUserById } from "./handlers/getUserById";
+import { signUpUserSchema } from "./handlers/signUpUser";
+import loginUser, { loginUserSchema } from "./handlers/loginUser";
+import confirmUser, { confirmUserSchema } from "./handlers/confirmUser";
 
 const userRoutes = [
   {
     //! User
     method: "POST",
-    path: "/users",
+    path: "/users/signup",
     options: {
       validate: {
-        payload: userSchema,
+        payload: signUpUserSchema,
       },
     },
-    handler: POST_User,
+    handler: signUpUser,
+  },
+  {
+    //! User
+    method: "POST",
+    path: "/users/confirm",
+    options: {
+      validate: {
+        payload: confirmUserSchema,
+      },
+    },
+    handler: confirmUser,
+  },
+  {
+    method: "POST",
+    path: "/users/login",
+    options: {
+      validate: {
+        payload: loginUserSchema,
+      },
+    },
+    handler: loginUser,
   },
   {
     method: "GET",
     path: "/users/{userId}",
-    handler: GET_User,
+    handler: getUserById,
   },
   {
     method: "PATCH",

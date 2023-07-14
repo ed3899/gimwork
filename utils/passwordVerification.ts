@@ -1,15 +1,7 @@
-import bcrypt from "bcrypt";
+import crypto from 'crypto';
 
-export async function hashPassword(password: string) {
-  const saltRounds = 3;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-  return hashedPassword;
-}
-
-export async function verifyPassword(
-  storedPassword: string,
-  hashedPassword: string
-): Promise<boolean> {
-  const passwordsMatch = await bcrypt.compare(storedPassword, hashedPassword);
-  return passwordsMatch;
+export default function sha256Hash(input: string): string {
+  const hash = crypto.createHash('sha256');
+  hash.update(input);
+  return hash.digest('base64');
 }

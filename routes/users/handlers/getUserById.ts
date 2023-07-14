@@ -1,7 +1,7 @@
 import Hapi from "@hapi/hapi";
 import { GimWorkResponse } from "../../types";
 
-export async function GET_User(
+export async function getUserById(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {

@@ -1,10 +1,21 @@
 import Hapi from "@hapi/hapi";
-import { hashPassword } from "../../../utils/passwordVerification";
+import sha256Hash from "../../../utils/passwordVerification";
 import { GimWorkResponse } from "../../types";
 import { User } from "./types";
 import CognitoSignUp from "../../utils/cognitoSignUp";
+import joi from "joi";
 
-async function POST_User(
+export const signUpUserSchema = joi.object<User>({
+  email: joi.string().email().required(),
+  password: joi.string().min(8).alphanum().required(),
+  firstName: joi.string().required(),
+  lastName: joi.string().required(),
+  phoneNumber: joi.string(),
+  offers: joi.array(),
+  wishlist: joi.array(),
+});
+
+async function signUpUser(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
@@ -13,7 +24,7 @@ async function POST_User(
 
   try {
     const { email, password: userPasswd } = payload;
-    const hashedPassword = await hashPassword(userPasswd);
+    const hashedPassword = await sha256Hash(userPasswd);
     await CognitoSignUp(email, hashedPassword);
 
     const newUser = await request.server.app.prisma.user.create({
@@ -50,4 +61,4 @@ async function POST_User(
   }
 }
 
-export default POST_User;
+export default signUpUser;
