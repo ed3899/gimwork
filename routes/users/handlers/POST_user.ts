@@ -2,6 +2,7 @@ import Hapi from "@hapi/hapi";
 import { hashPassword } from "../../../utils/passwordVerification";
 import { GimWorkResponse } from "../../types";
 import { User } from "./types";
+import CognitoSignUp from "../../utils/cognitoSignUp";
 
 async function POST_User(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
@@ -11,12 +12,16 @@ async function POST_User(
   let GimWorkResponse: GimWorkResponse<unknown>;
 
   try {
+    const { email, password: userPasswd } = payload;
+    const hashedPassword = await hashPassword(userPasswd);
+    await CognitoSignUp(email, hashedPassword);
+
     const newUser = await request.server.app.prisma.user.create({
       data: {
-        email: payload.email,
+        email: email,
+        password: hashedPassword,
         firstName: payload.firstName,
         lastName: payload.lastName,
-        password: await hashPassword(payload.password),
         phoneNumber: payload.phoneNumber,
       },
     });

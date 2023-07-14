@@ -18,7 +18,9 @@
   "dependencies": {
     "@hapi/hapi": "^21.3.2",
     "@prisma/client": "^5.0.0",
+    "aws-sdk": "^2.1415.0",
     "bcrypt": "^5.1.0",
+    "dotenv": "^16.3.1",
     "joi": "^17.9.2",
     "prettier": "^3.0.0",
     "prisma": "^5.0.0",

@@ -1,4 +1,6 @@
 import root, { server } from "./routes/root";
+import { config } from "dotenv";
+config({ path: "aws.env" });
 
 process.on("unhandledRejection", async (err) => {
   await server.app.prisma.$disconnect();
