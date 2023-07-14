@@ -7,15 +7,6 @@ import prisma from "../db/index";
 import userRoutes from "./users/routes";
 import offerRoutes from "./offers";
 
-interface Route {
-  method: string;
-  path: string;
-  handler: (
-    request: Hapi.Request<Hapi.ReqRefDefaults>,
-    h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-  ) => string;
-}
-
 export const server = new Hapi.Server({
   port: 3000,
   host: "127.0.0.1",
@@ -25,7 +16,7 @@ export const server = new Hapi.Server({
 });
 
 const root = async () => {
-  R.forEach<Route>(
+  R.forEach<Hapi.ServerRoute>(
     (route) => {
       server.route(route);
     },

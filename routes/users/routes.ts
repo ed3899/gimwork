@@ -1,26 +1,12 @@
 import Hapi from "@hapi/hapi";
-import { PrismaClient } from "@prisma/client";
+import POST_User from "./handlers/POST_user";
 
 const userRoutes = [
   {
     //! User
     method: "POST",
     path: "/users",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      // request.server.app.prisma.user.create({
-      //   data: {
-      //     email: request.payload.email,
-      //     password: request.payload.password,
-      //     firstName: request.payload.firstName,
-      //     lastName: request.payload.lastName,
-      //   },
-      // });
-
-      return "Hello World!";
-    },
+    handler: POST_User
   },
   {
     method: "GET",
