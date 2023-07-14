@@ -1,5 +1,4 @@
 import { CognitoIdentityServiceProvider } from "aws-sdk";
-import CalculateSecretHash from "./calculateSecretHash";
 
 export default async function CognitoSignUp(
   email: string,
