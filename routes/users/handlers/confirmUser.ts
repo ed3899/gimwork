@@ -2,7 +2,11 @@ import Hapi from "@hapi/hapi";
 import sha256Hash from "../../../utils/passwordVerification";
 import { GimWorkResponse } from "../../types";
 import joi from "joi";
-import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserPool,
+} from "amazon-cognito-identity-js";
 
 interface Confirmation {
   email: string;
@@ -21,7 +25,7 @@ export default async function confirmUser(
   const payload = request.payload as Confirmation;
   let GimWorkResponse: GimWorkResponse<string>;
   try {
-    const { token , email } = payload;
+    const { token, email } = payload;
     const poolData = {
       UserPoolId: process.env.GIMWORK_COGNITO_POOL_ID!,
       ClientId: process.env.GIMWORK_COGNITO_POOL_CLIENT_ID!,

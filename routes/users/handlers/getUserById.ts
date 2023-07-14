@@ -1,5 +1,8 @@
 import Hapi from "@hapi/hapi";
 import { GimWorkResponse } from "../../types";
+import { verify } from "jsonwebtoken";
+
+import { CognitoIdentityServiceProvider } from "aws-sdk";
 
 export async function getUserById(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
@@ -8,6 +11,18 @@ export async function getUserById(
   let GimWorkResponse: GimWorkResponse<unknown>;
 
   try {
+    const authorizationHeader = request.headers.authorization;
+    const token = authorizationHeader?.split(" ")[1];
+
+    const cognito = new CognitoIdentityServiceProvider({
+      apiVersion: process.env.COGNITO_API_VERSION!,
+    });
+    await cognito
+      .getUser({
+        AccessToken: token!,
+      })
+      .promise();
+
     const requestedUser = await request.server.app.prisma.user.findUnique({
       where: {
         userId: request.params.userId,

@@ -3,7 +3,11 @@ import sha256Hash from "../../../utils/passwordVerification";
 import { GimWorkResponse } from "../../types";
 import { User } from "./types";
 import joi from "joi";
-import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserPool,
+} from "amazon-cognito-identity-js";
 
 export const loginUserSchema = joi.object<User>({
   email: joi.string().email().required(),
@@ -28,7 +32,7 @@ async function loginUser(
     const authData = {
       Username: email,
       Password: hashedPassword,
-    }
+    };
     const authDetails = new AuthenticationDetails(authData);
     const userData = {
       Username: email,
