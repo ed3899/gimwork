@@ -1,6 +1,5 @@
 import R from "ramda";
 import Hapi from "@hapi/hapi";
-import { PrismaClient } from "@prisma/client";
 
 import prisma from "../db/index";
 

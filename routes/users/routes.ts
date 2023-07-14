@@ -1,5 +1,7 @@
 import Hapi from "@hapi/hapi";
-import POST_User, { User } from "./handlers/POST_user";
+import POST_User from "./handlers/POST_user";
+import { GET_User } from "./handlers/GET_user";
+import { User } from "./handlers/types";
 import joi from "joi";
 
 const userSchema = joi.object<User>({
@@ -26,13 +28,8 @@ const userRoutes = [
   },
   {
     method: "GET",
-    path: "/users/{usersId}",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
+    path: "/users/{userId}",
+    handler: GET_User,
   },
   {
     method: "PATCH",
