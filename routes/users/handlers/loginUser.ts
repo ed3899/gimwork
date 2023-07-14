@@ -16,7 +16,6 @@ async function loginUser(
 ) {
   const payload = request.payload as User;
   let GimWorkResponse: GimWorkResponse<string>;
-  let jwt;
 
   try {
     const { email, password: userPasswd } = payload;
@@ -36,29 +35,20 @@ async function loginUser(
       Pool: userPool,
     };
     const cognitoUser = new CognitoUser(userData);
+    const authenticateUser = (): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        cognitoUser.authenticateUser(authDetails, {
+          onSuccess: (res) => {
+            resolve(res.getAccessToken().getJwtToken());
+          },
+          onFailure: (err) => {
+            reject(err);
+          },
+        });
+      });
+    };
 
-    cognitoUser.confirmRegistration("085912", true, (err, result) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log("call result:", result)
-      console.log(result);
-    });
-
-    cognitoUser.authenticateUser(authDetails, {
-      onSuccess: (result) => {
-        jwt = result.getAccessToken().getJwtToken();
-        console.log(result);
-      },
-      onFailure: (err) => {
-        console.log(err);
-      },
-    });
-
-    if (!jwt) {
-      throw new Error("Unauthorized");
-    }
+    const jwt = await authenticateUser();
 
     GimWorkResponse = {
       status: 200,
