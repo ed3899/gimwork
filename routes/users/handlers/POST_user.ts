@@ -31,7 +31,7 @@ async function POST_User(
       },
     });
 
-    const {password, ...userDataToBeSent} = newUser;
+    const { password, ...userDataToBeSent } = newUser;
 
     GimWorkResponse = {
       status: 201,

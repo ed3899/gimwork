@@ -1,12 +1,28 @@
 import Hapi from "@hapi/hapi";
-import POST_User from "./handlers/POST_user";
+import POST_User, { User } from "./handlers/POST_user";
+import joi from "joi";
+
+const userSchema = joi.object<User>({
+  email: joi.string().email().required(),
+  password: joi.string().min(8).alphanum().required(),
+  firstName: joi.string().required(),
+  lastName: joi.string().required(),
+  phoneNumber: joi.string(),
+  offers: joi.array(),
+  wishlist: joi.array(),
+});
 
 const userRoutes = [
   {
     //! User
     method: "POST",
     path: "/users",
-    handler: POST_User
+    options: {
+      validate: {
+        payload: userSchema,
+      },
+    },
+    handler: POST_User,
   },
   {
     method: "GET",
