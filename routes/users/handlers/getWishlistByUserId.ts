@@ -12,11 +12,13 @@ export default async function getWishlistByUserId(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const requestedUserWishlist = await request.server.app.prisma.user.findUnique({
-      where: {
-        userId: request.params.userId,
-      },
-    }).wishlist();
+    const requestedUserWishlist = await request.server.app.prisma.user
+      .findUnique({
+        where: {
+          userId: request.params.userId,
+        },
+      })
+      .wishlist();
 
     GimWorkResponse = {
       status: 200,

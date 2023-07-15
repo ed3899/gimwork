@@ -5,15 +5,15 @@ import joi from "joi";
 import { Offer } from "@prisma/client";
 import R from "ramda";
 
-interface WishlistedItems {
+interface ItemsToBeRemoved {
   wishlistedIds: Offer["offerId"][];
 }
 
-export const addToWishlistSchema = joi.object<WishlistedItems>({
+export const addToWishlistSchema = joi.object<ItemsToBeRemoved>({
   wishlistedIds: joi.array().items(joi.string()).required(),
 });
 
-export default async function addToWishlistByUserId(
+export default async function removeItemFromWishlistByUserId(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
@@ -23,40 +23,24 @@ export default async function addToWishlistByUserId(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const { wishlistedIds } = request.payload as WishlistedItems;
-    const requestedUser = await request.server.app.prisma.user.findUnique({
-      where: {
-        userId: request.params.userId,
-      },
-    });
-    if (!requestedUser) {
-      GimWorkResponse = {
-        status: 404,
-        message: "User not found",
-        timestamp: new Date().toISOString(),
-      };
-      return h.response(GimWorkResponse).type("application/json");
-    }
-
-    const toBeWishlistedItems = R.map(
-      (value) => ({ offerId: value }),
-      wishlistedIds
-    );
-    const updatedUserWishlist = await request.server.app.prisma.user
+    const { wishlistedIds } = request.payload as ItemsToBeRemoved;
+    const updatedWishlist = await request.server.app.prisma.user
       .update({
-        where: { userId: requestedUser.userId },
+        where: {
+          userId: request.params.userId,
+        },
         data: {
           wishlist: {
-            connect: toBeWishlistedItems,
+            disconnect: wishlistedIds.map((value) => ({ offerId: value })),
           },
         },
       })
       .wishlist();
 
     GimWorkResponse = {
-      status: 201,
-      message: "Items added to wishlist",
-      data: updatedUserWishlist,
+      status: 200,
+      message: "Updated wishlist",
+      data: updatedWishlist,
       timestamp: new Date().toISOString(),
     };
     return h.response(GimWorkResponse).type("application/json");
@@ -64,7 +48,7 @@ export default async function addToWishlistByUserId(
     const err = error as Error;
     GimWorkResponse = {
       status: 500,
-      message: "Failed to add items to wishlist",
+      message: "Failed to update wishlist",
       error: err.message,
       timestamp: new Date().toISOString(),
     };

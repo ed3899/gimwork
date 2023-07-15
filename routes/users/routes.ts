@@ -8,8 +8,9 @@ import patchUserById from "./handlers/patchUserById";
 import deleteUserById from "./handlers/deleteUserById";
 import addToWishlistByUserId, {
   addToWishlistSchema,
-} from "./handlers/addToWishlistByUserId";
+} from "./handlers/updateWishlistByUserId";
 import getWishlistByUserId from "./handlers/getWishlistByUserId";
+import removeItemFromWishlistByUserId from "./handlers/removeItemFromWishlistByUserId";
 
 const userRoutes = [
   {
@@ -60,7 +61,7 @@ const userRoutes = [
   },
   //! User wishlist
   {
-    method: "POST",
+    method: "PUT",
     path: "/users/{userId}/wishlist",
     options: {
       validate: {
@@ -73,26 +74,6 @@ const userRoutes = [
     method: "GET",
     path: "/users/{userId}/wishlist",
     handler: getWishlistByUserId,
-  },
-  {
-    method: "PUT",
-    path: "/users/{userId}/wishlist",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
-  },
-  {
-    method: "DELETE",
-    path: "/users/{userId}/wishlist/{wishlistItemId}",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
   },
 ];
 

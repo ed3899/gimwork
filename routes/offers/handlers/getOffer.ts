@@ -14,11 +14,24 @@ async function getOffer(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const {minPrice, maxPrice, category, minDate, maxDate, userId, limit, skip } = request.query;
+    const {
+      minPrice,
+      maxPrice,
+      category,
+      minDate,
+      maxDate,
+      userId,
+      limit,
+      skip,
+    } = request.query;
     const _minPrice = minPrice ? parseInt(minPrice, 10) : 0;
     const _maxPrice = maxPrice ? parseInt(maxPrice, 10) : 1000000;
-    const _minDate = minDate ? new Date(minDate) : new Date("2021-01-01T00:00:00.000Z");
-    const _maxDate = maxDate ? new Date(maxDate) : new Date("3000-12-31T00:00:00.000Z");
+    const _minDate = minDate
+      ? new Date(minDate)
+      : new Date("2021-01-01T00:00:00.000Z");
+    const _maxDate = maxDate
+      ? new Date(maxDate)
+      : new Date("3000-12-31T00:00:00.000Z");
     const _limit = limit ? parseInt(limit, 10) : 10;
     if (_limit > 100) {
       throw new Error("Limit cannot be greater than 100");
@@ -40,11 +53,11 @@ async function getOffer(
         },
         Price: {
           gte: _minPrice,
-          lte: _maxPrice
+          lte: _maxPrice,
         },
         PublishedDate: {
           gte: _minDate,
-          lte: _maxDate
+          lte: _maxDate,
         },
         CreatedBy: {
           userId: userId ? userId : undefined,
