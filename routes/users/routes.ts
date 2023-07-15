@@ -10,6 +10,7 @@ import addToWishlistByUserId, {
   addToWishlistSchema,
 } from "./handlers/updateWishlistByUserId";
 import getWishlistByUserId from "./handlers/getWishlistByUserId";
+import deleteFromWishlistByUserId from "./handlers/deleteFromWishlistByUserId";
 
 const userRoutes = [
   {
@@ -68,6 +69,16 @@ const userRoutes = [
       },
     },
     handler: addToWishlistByUserId,
+  },
+  {
+    method: "DELETE",
+    path: "/users/{userId}/wishlist",
+    options: {
+      validate: {
+        payload: addToWishlistSchema,
+      },
+    },
+    handler: deleteFromWishlistByUserId,
   },
   {
     method: "GET",

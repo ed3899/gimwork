@@ -23,8 +23,7 @@ export default async function addToWishlistByUserId(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const { wishlistedIds } =
-      request.payload as WishlistedItems;
+    const { wishlistedIds } = request.payload as WishlistedItems;
     const _wishlistedIds = wishlistedIds ? wishlistedIds : [];
 
     if (_wishlistedIds.length === 0) {
@@ -37,18 +36,48 @@ export default async function addToWishlistByUserId(
       return h.response(GimWorkResponse).type("application/json");
     }
 
-    const wishlist = await request.server.app.prisma.wishlist.update({
+    const w = await request.server.app.prisma.wishlist.findFirst({
       where: {
         OwnerId: request.params.userId,
       },
-      data: {
-        Items: {
-          create: _wishlistedIds.map((id) => ({
-            OfferId: id,
-          })),
-        }
-      },
-    }).Items();
+    });
+
+    if (!w) {
+      const ncwi = await request.server.app.prisma.wishlist.create({
+        data: {
+          OwnerId: request.params.userId,
+          Items: {
+            create: _wishlistedIds.map((id) => ({
+              OfferId: id,
+            })),
+          },
+        },
+      }).Items();
+
+      GimWorkResponse = {
+        status: 200,
+        message: "Items added to wishlist",
+        data: ncwi,
+        timestamp: new Date().toISOString(),
+      };
+      return h.response(GimWorkResponse).type("application/json");
+    }
+
+
+    const wishlist = await request.server.app.prisma.wishlist
+      .update({
+        where: {
+          OwnerId: request.params.userId,
+        },
+        data: {
+          Items: {
+            create: _wishlistedIds.map((id) => ({
+              OfferId: id,
+            })),
+          },
+        },
+      })
+      .Items();
 
     GimWorkResponse = {
       status: 200,
