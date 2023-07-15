@@ -54,23 +54,55 @@ export default async function addToWishlistByUserId(
 
     // Add items to wishlist
     if (_wishlistedIds.length > 0) {
-      updatedWishlist = await request.server.app.prisma.user
-        .update({
+      // Get current wishlist
+      const currentWishlist =
+        await request.server.app.prisma.wishlist.findUnique({
           where: {
-            userId: request.params.userId,
+            ownerId: request.params.userId,
           },
-          data: {
-            wishlist: {
-              connect: _wishlistedIds.map((value) => ({ offerId: value })),
+          include: {
+            items: true,
+          },
+        });
+
+      // If it does not exist or is empty, create a new wishlist
+      if (!currentWishlist || currentWishlist?.items?.length === 0) {
+        const newWishlistedItems = await request.server.app.prisma.wishlist
+          .create({
+            data: {
+              ownerId: request.params.userId,
+              items: {
+                create: _wishlistedIds.map((value) => ({
+                  offerId: value,
+                })),
+              },
             },
-          },
-        })
-        .wishlist();
+          })
+          .items();
+
+        GimWorkResponse = {
+          status: 201,
+          message: "Items added to wishlist",
+          data: newWishlistedItems,
+          timestamp: new Date().toISOString(),
+        };
+        return h.response(GimWorkResponse).type("application/json");
+      }
+
+      // If it exists, add items to wishlist
+      const wishlistedItems =
+        await request.server.app.prisma.wishlistedItem.createMany({
+          data: _wishlistedIds.map((value) => ({
+            WishlistId: currentWishlist!.wishlistId,
+            offerId: value,
+            ownerId: request.params.userId,
+          })),
+        });
 
       GimWorkResponse = {
         status: 201,
         message: "Items added to wishlist",
-        data: updatedWishlist,
+        data: wishlistedItems,
         timestamp: new Date().toISOString(),
       };
       return h.response(GimWorkResponse).type("application/json");
@@ -79,43 +111,47 @@ export default async function addToWishlistByUserId(
     // Remove items from wishlist
     if (_unwishlistedIds.length > 0) {
       // Get current wishlist
-      const currentWishlist = await request.server.app.prisma.user
-        .findUnique({
+      const currentWishlist =
+        await request.server.app.prisma.wishlist.findUnique({
           where: {
-            userId: request.params.userId,
+            ownerId: request.params.userId,
           },
-        })
-        .wishlist();
-      // If current wishlist is empty stop
-      if (!currentWishlist) {
+          include: {
+            items: true,
+          },
+        });
+
+      if (!currentWishlist || currentWishlist?.items?.length === 0) {
         GimWorkResponse = {
           status: 400,
-          message: "Current wishlist is empty",
+          message: "No items to be removed from wishlist, wishlist is empty",
           timestamp: new Date().toISOString(),
         };
         return h.response(GimWorkResponse).type("application/json");
       }
-      // Calculate difference of ids between current wishlist and items to be removed
-      const currentWishlistIds = currentWishlist.map((value) =>  value.offerId);
-      const difference = R.difference(currentWishlistIds, _unwishlistedIds);
-      await request.server.app.prisma.user.updateMany({
-        where: {
-          offerId: {
-            in: _unwishlistedIds,
-          },
-          WishlistedBy: {
-            userId: request.params.userId,
-          },
-        },
-        data: {
 
-        },
-      });
+      // If it exists, remove items from wishlist
+      const removedItems = await request.server.app.prisma.wishlist
+        .update({
+          where: {
+            ownerId: request.params.userId,
+          },
+          data: {
+            items: {
+              deleteMany: {
+                wishlistedItemId: {
+                  in: _unwishlistedIds,
+                },
+              },
+            },
+          },
+        })
+        .items();
 
       GimWorkResponse = {
         status: 200,
         message: "Items removed from wishlist",
-        data: updatedWishlist,
+        data: removedItems,
         timestamp: new Date().toISOString(),
       };
       return h.response(GimWorkResponse).type("application/json");
