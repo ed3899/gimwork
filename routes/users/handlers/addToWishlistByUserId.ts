@@ -13,7 +13,7 @@ export const addToWishlistSchema = joi.object<WishlistedItems>({
   wishlistedIds: joi.array().items(joi.string()).required(),
 });
 
-export default async function addToWishlist(
+export default async function addToWishlistByUserId(
   request: Hapi.Request<Hapi.ReqRefDefaults>,
   h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
 ) {
@@ -23,30 +23,35 @@ export default async function addToWishlist(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const {wishlistedIds} = request.payload as WishlistedItems;
+    const { wishlistedIds } = request.payload as WishlistedItems;
     const requestedUser = await request.server.app.prisma.user.findUnique({
       where: {
         userId: request.params.userId,
       },
-    })
+    });
     if (!requestedUser) {
       GimWorkResponse = {
         status: 404,
-        message: "User with invalid token",
+        message: "User not found",
         timestamp: new Date().toISOString(),
       };
       return h.response(GimWorkResponse).type("application/json");
     }
 
-    const toBeWishlistedItems = R.map((value) => ({ offerId: value }), wishlistedIds)
-    const updatedUserWishlist = await request.server.app.prisma.user.update({
-      where: { userId: requestedUser.userId },
-      data: {
-        wishlist: {
-          connect: toBeWishlistedItems,
+    const toBeWishlistedItems = R.map(
+      (value) => ({ offerId: value }),
+      wishlistedIds
+    );
+    const updatedUserWishlist = await request.server.app.prisma.user
+      .update({
+        where: { userId: requestedUser.userId },
+        data: {
+          wishlist: {
+            connect: toBeWishlistedItems,
+          },
         },
-      },
-    }).wishlist();
+      })
+      .wishlist();
 
     GimWorkResponse = {
       status: 201,

@@ -6,7 +6,10 @@ import loginUser, { loginUserSchema } from "./handlers/loginUser";
 import confirmUser, { confirmUserSchema } from "./handlers/confirmUser";
 import patchUserById from "./handlers/patchUserById";
 import deleteUserById from "./handlers/deleteUserById";
-import addToWishlist, { addToWishlistSchema } from "./handlers/addToWishlist";
+import addToWishlistByUserId, {
+  addToWishlistSchema,
+} from "./handlers/addToWishlistByUserId";
+import getWishlistByUserId from "./handlers/getWishlistByUserId";
 
 const userRoutes = [
   {
@@ -61,20 +64,15 @@ const userRoutes = [
     path: "/users/{userId}/wishlist",
     options: {
       validate: {
-        payload: addToWishlistSchema
-      }
+        payload: addToWishlistSchema,
+      },
     },
-    handler: addToWishlist,
+    handler: addToWishlistByUserId,
   },
   {
     method: "GET",
     path: "/users/{userId}/wishlist",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      return "Hello World!";
-    },
+    handler: getWishlistByUserId,
   },
   {
     method: "PUT",
