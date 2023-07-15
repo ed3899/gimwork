@@ -1,20 +1,13 @@
-import Hapi from "@hapi/hapi";
 import createOffer from "./handlers/createOffer";
 import patchOfferById from "./handlers/patchOfferById";
 import deleteOfferById from "./handlers/deleteOfferById";
+import getOffer from "./handlers/getOffer";
 
 const offerRoutes = [
   {
     method: "GET",
     path: "/offers",
-    handler: (
-      request: Hapi.Request<Hapi.ReqRefDefaults>,
-      h: Hapi.ResponseToolkit<Hapi.ReqRefDefaults>
-    ) => {
-      // Only display 10 at a time, max 10
-      // Queries available: ?price=int ?category={CategoryType} ?date={date} ?ascending={true/false} ?range{min, max} ?dates{start, end} ?user={userId}
-      return "Hello World!";
-    },
+    handler: getOffer,
   },
   {
     method: "POST",
