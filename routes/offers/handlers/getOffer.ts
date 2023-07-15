@@ -23,7 +23,7 @@ async function getOffer(
     if (_limit > 100) {
       throw new Error("Limit cannot be greater than 100");
     }
-    let _skip;
+    let _skip = 0;
     if (skip) {
       const totalOffers = await request.server.app.prisma.offer.count();
       const parsedSkip = parseInt(skip, 10);
