@@ -12,18 +12,27 @@ export default async function getWishlistByUserId(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const requestedUserWishlist = await request.server.app.prisma.user
-      .findUnique({
+    const w = await request.server.app.prisma.wishlist
+      .findFirst({
         where: {
-          userId: request.params.userId,
+          OwnerId: request.params.userId,
         },
-      })
-      .wishlist();
+      }).Items();
+
+    if (!w) {
+      GimWorkResponse = {
+        status: 200,
+        message: "User wishlist",
+        data: [],
+        timestamp: new Date().toISOString(),
+      };
+      return h.response(GimWorkResponse).type("application/json");
+    }
 
     GimWorkResponse = {
       status: 200,
       message: "User wishlist",
-      data: requestedUserWishlist,
+      data: w,
       timestamp: new Date().toISOString(),
     };
     return h.response(GimWorkResponse).type("application/json");

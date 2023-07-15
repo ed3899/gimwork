@@ -25,19 +25,20 @@ model User {
 model Wishlist {
   wishlistId String @id @default(auto()) @map("_id") @db.ObjectId
 
-  owner   User   @relation(fields: [ownerId], references: [userId])
-  ownerId String @unique @db.ObjectId
+  Owner   User   @relation(fields: [OwnerId], references: [userId])
+  OwnerId String @unique @db.ObjectId
 
-  items WishlistedItem[]
+  Items WishlistedOffer[]
 }
 
-model WishlistedItem {
-  wishlistedItemId String @id @default(auto()) @map("_id") @db.ObjectId
+model WishlistedOffer {
+  wishlistedOfferId String @id @default(auto()) @map("_id") @db.ObjectId
 
-  Offer Offer?
+  Offer   Offer  @relation(fields: [OfferId], references: [offerId])
+  OfferId String @db.ObjectId
 
-  Wishlist   Wishlist @relation(fields: [WishlistId], references: [wishlistId])
-  WishlistId String   @db.ObjectId
+  Wishlist   Wishlist  @relation(fields: [WishlistId], references: [wishlistId])
+  WishlistId String    @db.ObjectId
 }
 
 enum Category {
@@ -52,12 +53,11 @@ model Offer {
   description        String?
   price              Float
   category           Category
-  promotionalPicture String?
+  promotionalPicture String
   publishedDate      DateTime @default(now())
 
   CreatedBy User   @relation("UserOffers", fields: [CreatorId], references: [userId])
   CreatorId String @db.ObjectId
 
-  WishlistedItem   WishlistedItem @relation(fields: [WishlistedItemId], references: [wishlistedItemId])
-  WishlistedItemId String         @unique @db.ObjectId
+  Wishlists WishlistedOffer[]
 }

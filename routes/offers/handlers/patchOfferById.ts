@@ -7,10 +7,10 @@ import extractEmailFromCognito from "../../utils/getEmailFromCognitoResponse";
 import pickCategory from "../../utils/pickCategory";
 
 export const patchOfferSchema = joi.object<Offer>({
-  Description: joi.string(),
-  Category: joi.string(),
-  Price: joi.number(),
-  PromotionalPicture: joi.string(),
+  description: joi.string(),
+  category: joi.string().required(),
+  price: joi.number(),
+  promotionalPicture: joi.string(),
 });
 
 async function patchOffer(
@@ -21,23 +21,23 @@ async function patchOffer(
   let GimWorkResponse: GimWorkResponse<unknown>;
 
   try {
-    const { Description, Category, Price, PromotionalPicture } = payload;
+    const { description, category, price, promotionalPicture } = payload;
     const { offerId } = request.params;
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
     const email = extractEmailFromCognito(res.UserAttributes);
-    const pickedCategory = pickCategory(Category);
+    const pickedCategory = pickCategory(category!);
 
     const newOffer = await request.server.app.prisma.offer.update({
       where: {
         offerId: offerId,
       },
       data: {
-        Description: Description,
-        Category: pickedCategory,
-        Price: Price,
-        PromotionalPicture: PromotionalPicture,
+        description,
+        category: pickedCategory,
+        price,
+        promotionalPicture,
         CreatedBy: {
           connect: {
             email: email,

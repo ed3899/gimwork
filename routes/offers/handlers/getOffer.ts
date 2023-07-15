@@ -48,14 +48,14 @@ async function getOffer(
 
     const offers = await request.server.app.prisma.offer.findMany({
       where: {
-        Category: {
+        category: {
           equals: category ? pickCategory(category) : undefined,
         },
-        Price: {
+        price: {
           gte: _minPrice,
           lte: _maxPrice,
         },
-        PublishedDate: {
+        publishedDate: {
           gte: _minDate,
           lte: _maxDate,
         },

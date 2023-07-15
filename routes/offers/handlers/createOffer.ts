@@ -7,10 +7,10 @@ import extractEmailFromCognito from "../../utils/getEmailFromCognitoResponse";
 import pickCategory from "../../utils/pickCategory";
 
 export const createOfferSchema = joi.object<Offer>({
-  Description: joi.string().required(),
-  Category: joi.string().required(),
-  Price: joi.number().required(),
-  PromotionalPicture: joi.string(),
+  description: joi.string().required(),
+  category: joi.string().required(),
+  price: joi.number().required(),
+  promotionalPicture: joi.string(),
 });
 
 async function createOffer(
@@ -21,19 +21,19 @@ async function createOffer(
   let GimWorkResponse: GimWorkResponse<unknown>;
 
   try {
-    const { Description, Category, Price, PromotionalPicture } = payload;
+    const { description, category, price, promotionalPicture } = payload;
     const authorizationHeader = request.headers.authorization;
     const token = authorizationHeader?.split(" ")[1];
     const res = await cognitoAuth(token!);
     const email = extractEmailFromCognito(res.UserAttributes);
-    const pickedCategory = pickCategory(Category);
+    const pickedCategory = pickCategory(category!);
 
     const newOffer = await request.server.app.prisma.offer.create({
       data: {
-        Description: Description,
-        Category: pickedCategory,
-        Price: Price,
-        PromotionalPicture: PromotionalPicture,
+        description,
+        category: pickedCategory,
+        price,
+        promotionalPicture,
         CreatedBy: {
           connect: {
             email: email,

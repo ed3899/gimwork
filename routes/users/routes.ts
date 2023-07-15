@@ -10,7 +10,6 @@ import addToWishlistByUserId, {
   addToWishlistSchema,
 } from "./handlers/updateWishlistByUserId";
 import getWishlistByUserId from "./handlers/getWishlistByUserId";
-import removeItemFromWishlistByUserId from "./handlers/removeItemFromWishlistByUserId";
 
 const userRoutes = [
   {
