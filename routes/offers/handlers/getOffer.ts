@@ -14,7 +14,7 @@ async function getOffer(
     const token = authorizationHeader?.split(" ")[1];
     await cognitoAuth(token!);
 
-    const {minPrice, maxPrice, category, minDate, maxDate, userId, limit, skip } = request.params;
+    const {minPrice, maxPrice, category, minDate, maxDate, userId, limit, skip } = request.query;
     const _minPrice = minPrice ? parseInt(minPrice, 10) : 0;
     const _maxPrice = maxPrice ? parseInt(maxPrice, 10) : 1000000;
     const _minDate = minDate ? new Date(minDate) : new Date("2021-01-01T00:00:00.000Z");
