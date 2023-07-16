@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import React, {useState} from "react";
+import {View, TextInput, Button} from "react-native";
+import type {LoginScreen} from "../../../types";
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login: React.FC<LoginScreen> = ({navigation}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -15,16 +16,17 @@ const Login: React.FC = () => {
 
   const handleLogin = () => {
     // Perform login logic here
-    console.log('Login button clicked');
-    console.log('Email:', email);
-    console.log('Password:', password);
+    navigation.navigate("Profile");
+    console.log("Login button clicked");
+    console.log("Email:", email);
+    console.log("Password:", password);
   };
 
   const handleSignUp = () => {
     // Perform login logic here
-    console.log('Login button clicked');
-    console.log('Email:', email);
-    console.log('Password:', password);
+    console.log("Login button clicked");
+    console.log("Email:", email);
+    console.log("Password:", password);
   };
 
   return (
