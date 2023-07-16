@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {View, TextInput, Button} from "react-native";
-import type {LoginScreen} from "../../../types";
 
-const Login: React.FC<LoginScreen> = ({navigation}) => {
+const Home: React.FC<any> = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,18 +14,11 @@ const Login: React.FC<LoginScreen> = ({navigation}) => {
   };
 
   const handleLogin = () => {
-    // Perform login logic here
     navigation.navigate("Profile");
-    console.log("Login button clicked");
-    console.log("Email:", email);
-    console.log("Password:", password);
   };
 
   const handleSignUp = () => {
-    // Perform login logic here
-    console.log("Login button clicked");
-    console.log("Email:", email);
-    console.log("Password:", password);
+    navigation.navigate("Profile");
   };
 
   return (
@@ -49,4 +41,4 @@ const Login: React.FC<LoginScreen> = ({navigation}) => {
   );
 };
 
-export default Login;
+export default Home;
